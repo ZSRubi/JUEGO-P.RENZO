@@ -34,8 +34,27 @@ public class Inicio {
         JLabel textLabel = new JLabel("Menu Principal", SwingConstants.CENTER);
         textLabel.setFont(new Font("Arial", Font.BOLD, 20)); // Puedes ajustar el tamaño y estilo de la fuente aquí
 
-        // Añadir la etiqueta al panel en la parte superior
-        fondoLabel.add(textLabel, BorderLayout.NORTH);
+        // Crear un panel para la etiqueta de texto y el campo de texto
+        JPanel titlePanel = new JPanel();
+        titlePanel.setLayout(new BorderLayout());
+        titlePanel.add(textLabel, BorderLayout.NORTH);
+
+        // Crear y configurar el campo de texto para el nombre con un tamaño más pequeño
+        JTextField nameField = new JTextField(10); // Cambiar a un campo más pequeño
+        nameField.setFont(new Font("Arial", Font.PLAIN, 16));
+        nameField.setPreferredSize(new Dimension(150, 30)); // Ajusta el tamaño según tus necesidades
+
+        // Añadir la etiqueta y el campo de texto al panel de título
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        inputPanel.add(new JLabel("Nombre:")); // Etiqueta para el campo de texto
+        inputPanel.add(nameField);
+
+        // Añadir el panel de entrada al panel de título
+        titlePanel.add(inputPanel, BorderLayout.CENTER);
+
+        // Añadir el panel de título al panel de fondo en la parte central
+        fondoLabel.add(titlePanel, BorderLayout.CENTER);
 
         // Crear un panel para los botones y centrarlo
         JPanel buttonPanel = new JPanel();
