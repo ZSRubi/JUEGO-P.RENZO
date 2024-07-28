@@ -11,11 +11,10 @@ public class Inicio {
         // Crear el marco
         JFrame frame = new JFrame("INICIO");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 300);
+        frame.setSize(400, 400); // Aumentar el tamaño para acomodar la imagen
 
         // Cargar la imagen del icono
-        ImageIcon icon = new ImageIcon("src/main/java/com/mavenproject2/BC.png"); // Reemplaza con la ruta a tu archivo de icono
-        // Establecer el icono en el marco
+        ImageIcon icon = new ImageIcon("icons/avion.png"); // Ruta a tu imagen de icono
         frame.setIconImage(icon.getImage());
 
         // Cargar la imagen de fondo
@@ -27,38 +26,48 @@ public class Inicio {
 
         // Crear un JLabel para la imagen de fondo
         JLabel fondoLabel = new JLabel(fondo);
-        fondoLabel.setSize(400, 300); // Establecer el tamaño de la imagen
-        fondoLabel.setLayout(new BorderLayout()); // Establecer el layout para que la imagen se estire
+        fondoLabel.setSize(400, 400); // Ajustar el tamaño del fondo
+        fondoLabel.setLayout(new BorderLayout());
 
         // Crear y configurar la etiqueta de texto
         JLabel textLabel = new JLabel("Menu Principal", SwingConstants.CENTER);
-        textLabel.setFont(new Font("Arial", Font.BOLD, 20)); // Puedes ajustar el tamaño y estilo de la fuente aquí
+        textLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
         // Crear un panel para la etiqueta de texto y el campo de texto
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new BorderLayout());
         titlePanel.add(textLabel, BorderLayout.NORTH);
 
-        // Crear y configurar el campo de texto para el nombre con un tamaño más pequeño
-        JTextField nameField = new JTextField(10); // Cambiar a un campo más pequeño
+        // Crear y configurar el campo de texto para el nombre
+        JTextField nameField = new JTextField(10);
         nameField.setFont(new Font("Arial", Font.PLAIN, 16));
-        nameField.setPreferredSize(new Dimension(150, 30)); // Ajusta el tamaño según tus necesidades
+        nameField.setPreferredSize(new Dimension(150, 30));
 
         // Añadir la etiqueta y el campo de texto al panel de título
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        inputPanel.add(new JLabel("Nombre:")); // Etiqueta para el campo de texto
+        inputPanel.add(new JLabel("Nombre:"));
         inputPanel.add(nameField);
 
-        // Añadir el panel de entrada al panel de título
+        // Crear un JLabel para la imagen del icono
+        ImageIcon iconImage = new ImageIcon("icons/avion.png"); // Ruta a tu imagen
+        JLabel imageLabel = new JLabel(iconImage);
+
+        // Crear un panel para la imagen del icono
+        JPanel imagePanel = new JPanel();
+        imagePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        imagePanel.add(imageLabel);
+
+        // Añadir el panel de entrada y el panel de imagen al panel de título
         titlePanel.add(inputPanel, BorderLayout.CENTER);
+        titlePanel.add(imagePanel, BorderLayout.SOUTH);
 
         // Añadir el panel de título al panel de fondo en la parte central
         fondoLabel.add(titlePanel, BorderLayout.CENTER);
 
         // Crear un panel para los botones y centrarlo
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10)); // Centrar los botones y añadir espaciado
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
         // Crear botón "Jugar" con borde redondeado
         JButton botonJugar = new JButton("Jugar");
@@ -68,23 +77,23 @@ public class Inicio {
         botonJugar.setOpaque(true);
         botonJugar.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.WHITE, 2),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20))); // Añadir relleno
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)));
 
         // Establecer el tamaño preferido del botón "Jugar"
-        botonJugar.setPreferredSize(new Dimension(150, 40)); // Ajusta el tamaño según tus necesidades
+        botonJugar.setPreferredSize(new Dimension(150, 40));
 
         // Crear botón "Regresar" con borde redondeado
         JButton botonRegresar = new JButton("Regresar");
         botonRegresar.setFont(new Font("Arial", Font.BOLD, 16));
         botonRegresar.setForeground(Color.WHITE);
-        botonRegresar.setBackground(new Color(153, 0, 0)); // Cambia el color según tus preferencias
+        botonRegresar.setBackground(new Color(153, 0, 0));
         botonRegresar.setOpaque(true);
         botonRegresar.setBorder(BorderFactory.createCompoundBorder(
                 BorderFactory.createLineBorder(Color.WHITE, 2),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20))); // Añadir relleno
+                BorderFactory.createEmptyBorder(10, 20, 10, 20)));
 
         // Establecer el tamaño preferido del botón "Regresar"
-        botonRegresar.setPreferredSize(new Dimension(150, 40)); // Ajusta el tamaño según tus necesidades
+        botonRegresar.setPreferredSize(new Dimension(150, 40));
 
         // Añadir el listener para el botón "Jugar"
         botonJugar.addActionListener(new ActionListener() {
@@ -100,7 +109,7 @@ public class Inicio {
         botonRegresar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Cerrar el marco actual (o puedes agregar otra acción aquí)
+                // Cerrar el marco actual
                 frame.dispose();
             }
         });
@@ -109,7 +118,7 @@ public class Inicio {
         buttonPanel.add(botonJugar);
         buttonPanel.add(botonRegresar);
 
-        // Añadir el panel de botones al panel principal en la parte inferior
+        // Añadir el panel de botones al panel de fondo en la parte inferior
         fondoLabel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Añadir el panel al marco
@@ -127,6 +136,6 @@ public class Inicio {
     }
 
     void setVisible(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
