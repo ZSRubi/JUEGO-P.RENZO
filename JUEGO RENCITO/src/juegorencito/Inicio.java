@@ -1,6 +1,5 @@
 package juegorencito;
 
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,19 +11,22 @@ public class Inicio {
         // Crear el marco
         JFrame frame = new JFrame("INICIO");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400); // Aumentar el tamaño para acomodar los componentes
+        frame.setSize(400, 400); // Ajustar el tamaño para acomodar los componentes
 
-        // Crear el panel principal
+        // Crear el panel principal con color de fondo
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
+        panel.setBackground(new Color(175, 175, 155)); // Color verde ceniza
 
         // Crear y configurar la etiqueta de texto
         JLabel textLabel = new JLabel("Menu Principal", SwingConstants.CENTER);
         textLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        textLabel.setForeground(Color.WHITE); // Asegúrate de que el texto sea visible sobre el fondo
 
         // Crear un panel para la etiqueta de texto
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new BorderLayout());
+        titlePanel.setOpaque(false); // Hacer que el panel de título sea transparente
         titlePanel.add(textLabel, BorderLayout.NORTH);
 
         // Crear y configurar el campo de texto para el nombre
@@ -35,6 +37,7 @@ public class Inicio {
         // Añadir la etiqueta y el campo de texto al panel de entrada
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        inputPanel.setOpaque(false); // Hacer que el panel de entrada sea transparente
         inputPanel.add(new JLabel("Nombre:"));
         inputPanel.add(nameField);
 
@@ -44,6 +47,7 @@ public class Inicio {
         // Crear un panel para los botones y centrarlo
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.setOpaque(false); // Hacer que el panel de botones sea transparente
 
         // Crear botón "Jugar" con borde redondeado
         JButton botonJugar = new JButton("Jugar");
@@ -58,19 +62,6 @@ public class Inicio {
         // Establecer el tamaño preferido del botón "Jugar"
         botonJugar.setPreferredSize(new Dimension(150, 40));
 
-        // Crear botón "Regresar" con borde redondeado
-        JButton botonRegresar = new JButton("Regresar");
-        botonRegresar.setFont(new Font("Arial", Font.BOLD, 16));
-        botonRegresar.setForeground(Color.WHITE);
-        botonRegresar.setBackground(new Color(153, 0, 0));
-        botonRegresar.setOpaque(true);
-        botonRegresar.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.WHITE, 2),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)));
-
-        // Establecer el tamaño preferido del botón "Regresar"
-        botonRegresar.setPreferredSize(new Dimension(150, 40));
-
         // Añadir el listener para el botón "Jugar"
         botonJugar.addActionListener(new ActionListener() {
             @Override
@@ -81,18 +72,9 @@ public class Inicio {
             }
         });
 
-        // Añadir el listener para el botón "Regresar"
-        botonRegresar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Cerrar el marco actual
-                frame.dispose();
-            }
-        });
 
         // Añadir los botones al panel de botones
         buttonPanel.add(botonJugar);
-        buttonPanel.add(botonRegresar);
 
         // Añadir el panel de botones al panel principal en la parte inferior
         panel.add(titlePanel, BorderLayout.CENTER);
@@ -110,9 +92,5 @@ public class Inicio {
 
         // Hacer visible el marco
         frame.setVisible(true);
-    }
-
-    void setVisible(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
