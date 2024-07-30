@@ -19,14 +19,16 @@ public class Inicio {
         panel.setBackground(new Color(175, 175, 155)); // Color verde ceniza
 
         // Crear y configurar la etiqueta de texto
-        JLabel textLabel = new JLabel("Menu Principal", SwingConstants.CENTER);
+        JLabel textLabel = new JLabel("Menu Principal");
         textLabel.setFont(new Font("Arial", Font.BOLD, 20));
         textLabel.setForeground(Color.WHITE); // Asegúrate de que el texto sea visible sobre el fondo
+        textLabel.setHorizontalAlignment(SwingConstants.CENTER); // Centrar el texto horizontalmente
 
         // Crear un panel para la etiqueta de texto
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new BorderLayout());
         titlePanel.setOpaque(false); // Hacer que el panel de título sea transparente
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0)); // Añadir espacio arriba
         titlePanel.add(textLabel, BorderLayout.NORTH);
 
         // Crear y configurar el campo de texto para el nombre
@@ -41,8 +43,15 @@ public class Inicio {
         inputPanel.add(new JLabel("Nombre:"));
         inputPanel.add(nameField);
 
-        // Añadir el panel de entrada al panel de título
-        titlePanel.add(inputPanel, BorderLayout.CENTER);
+        // Crear un panel contenedor para centrar el inputPanel en el panel principal
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new GridBagLayout());
+        centerPanel.setOpaque(false); // Hacer que el panel central sea transparente
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        centerPanel.add(inputPanel, gbc);
 
         // Crear un panel para los botones y centrarlo
         JPanel buttonPanel = new JPanel();
@@ -72,13 +81,13 @@ public class Inicio {
             }
         });
 
-
-        // Añadir los botones al panel de botones
+        // Añadir el botón al panel de botones
         buttonPanel.add(botonJugar);
 
-        // Añadir el panel de botones al panel principal en la parte inferior
-        panel.add(titlePanel, BorderLayout.CENTER);
-        panel.add(buttonPanel, BorderLayout.SOUTH);
+        // Añadir los paneles al panel principal
+        panel.add(titlePanel, BorderLayout.NORTH); // Añadir el título en la parte superior
+        panel.add(centerPanel, BorderLayout.CENTER); // Centrar el panel de entrada en el centro
+        panel.add(buttonPanel, BorderLayout.SOUTH); // Añadir los botones en la parte inferior
 
         // Añadir el panel al marco
         frame.add(panel);
