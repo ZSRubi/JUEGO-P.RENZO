@@ -110,6 +110,9 @@ public class BatallaNavalGUI extends JFrame {
                 }
             }
         });
+
+         // Centrar la ventana
+        setLocationRelativeTo(null);
     }
 
     @Override
