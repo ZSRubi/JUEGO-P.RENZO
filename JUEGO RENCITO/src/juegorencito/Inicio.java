@@ -1,5 +1,6 @@
 package juegorencito;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -11,29 +12,17 @@ public class Inicio {
         // Crear el marco
         JFrame frame = new JFrame("INICIO");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400); // Aumentar el tamaño para acomodar la imagen
-
-        // Cargar la imagen del icono
-        ImageIcon icon = new ImageIcon("icons/avion.png"); // Ruta a tu imagen de icono
-        frame.setIconImage(icon.getImage());
-
-        // Cargar la imagen de fondo
-        ImageIcon fondo = new ImageIcon("src/main/java/com/mavenproject2/fondo.png"); // Reemplaza con la ruta a tu archivo de imagen de fondo
+        frame.setSize(400, 400); // Aumentar el tamaño para acomodar los componentes
 
         // Crear el panel principal
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
 
-        // Crear un JLabel para la imagen de fondo
-        JLabel fondoLabel = new JLabel(fondo);
-        fondoLabel.setSize(400, 400); // Ajustar el tamaño del fondo
-        fondoLabel.setLayout(new BorderLayout());
-
         // Crear y configurar la etiqueta de texto
         JLabel textLabel = new JLabel("Menu Principal", SwingConstants.CENTER);
         textLabel.setFont(new Font("Arial", Font.BOLD, 20));
 
-        // Crear un panel para la etiqueta de texto y el campo de texto
+        // Crear un panel para la etiqueta de texto
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new BorderLayout());
         titlePanel.add(textLabel, BorderLayout.NORTH);
@@ -43,27 +32,14 @@ public class Inicio {
         nameField.setFont(new Font("Arial", Font.PLAIN, 16));
         nameField.setPreferredSize(new Dimension(150, 30));
 
-        // Añadir la etiqueta y el campo de texto al panel de título
+        // Añadir la etiqueta y el campo de texto al panel de entrada
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
         inputPanel.add(new JLabel("Nombre:"));
         inputPanel.add(nameField);
 
-        // Crear un JLabel para la imagen del icono
-        ImageIcon iconImage = new ImageIcon("icons/avion.png"); // Ruta a tu imagen
-        JLabel imageLabel = new JLabel(iconImage);
-
-        // Crear un panel para la imagen del icono
-        JPanel imagePanel = new JPanel();
-        imagePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        imagePanel.add(imageLabel);
-
-        // Añadir el panel de entrada y el panel de imagen al panel de título
+        // Añadir el panel de entrada al panel de título
         titlePanel.add(inputPanel, BorderLayout.CENTER);
-        titlePanel.add(imagePanel, BorderLayout.SOUTH);
-
-        // Añadir el panel de título al panel de fondo en la parte central
-        fondoLabel.add(titlePanel, BorderLayout.CENTER);
 
         // Crear un panel para los botones y centrarlo
         JPanel buttonPanel = new JPanel();
@@ -118,11 +94,12 @@ public class Inicio {
         buttonPanel.add(botonJugar);
         buttonPanel.add(botonRegresar);
 
-        // Añadir el panel de botones al panel de fondo en la parte inferior
-        fondoLabel.add(buttonPanel, BorderLayout.SOUTH);
+        // Añadir el panel de botones al panel principal en la parte inferior
+        panel.add(titlePanel, BorderLayout.CENTER);
+        panel.add(buttonPanel, BorderLayout.SOUTH);
 
         // Añadir el panel al marco
-        frame.add(fondoLabel);
+        frame.add(panel);
 
         // Centrar el marco en la pantalla
         Toolkit toolkit = Toolkit.getDefaultToolkit();
