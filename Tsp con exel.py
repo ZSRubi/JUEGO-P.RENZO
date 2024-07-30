@@ -69,7 +69,7 @@ fig, ax = plt.subplots(figsize=(10, 7))
 def update(num, tour, pos, ax):
     ax.clear()
     nx.draw(G, pos, with_labels=True, node_color='lightblue', node_size=500, font_size=16, font_weight='bold', ax=ax)
-    nx.draw_networkx_edge_labels(G, pos, edge_labels=weights, font_color='red', ax=ax)
+    nx.draw_networkx_edge_labels(G, pos, edge_labels=weights, font_color='green', ax=ax)
     if num > 0:
         edges = [(tour[i], tour[i + 1]) for i in range(num)] + [(tour[num], tour[0])] if num == len(tour) - 1 else [(tour[i], tour[i + 1]) for i in range(num)]
         nx.draw_networkx_edges(G, pos, edgelist=edges, edge_color='red', width=2, ax=ax)
