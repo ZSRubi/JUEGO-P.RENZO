@@ -1,6 +1,7 @@
 package juegorencito;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,26 +59,35 @@ public class BatallaNavalGUI extends JFrame {
         JScrollPane scrollPane = new JScrollPane(gameLog);
         scrollPane.setPreferredSize(new Dimension(1200, 150));
 
-        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, playerPanel, computerPanel);
-        splitPane.setDividerLocation(600);
+        // Cambiar color del texto del temporizador
+        timerLabel.setForeground(Color.RED); // Cambiar el color del texto
 
-        JPanel southPanel = new JPanel(new BorderLayout());
-        southPanel.add(scrollPane, BorderLayout.CENTER);
-        southPanel.add(timerLabel, BorderLayout.NORTH);
+        // Panel para el log, temporizador y botones
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Añadir espacio alrededor del panel
+        bottomPanel.add(timerLabel, BorderLayout.WEST);
+        bottomPanel.add(scrollPane, BorderLayout.CENTER);
 
-        add(splitPane, BorderLayout.CENTER);
-        add(southPanel, BorderLayout.SOUTH);
-
-        // Add buttons to panel
-        resetButton = new JButton("Reset");
-        abandonButton = new JButton("Abandon");
-        endTurnButton = new JButton("End Turn");
-
+        // Panel de botones
         JPanel buttonPanel = new JPanel();
+        resetButton = new JButton("Restaurar");
+        abandonButton = new JButton("Abandonar");
+        endTurnButton = new JButton("Fin del turno");
         buttonPanel.add(resetButton);
         buttonPanel.add(abandonButton);
         buttonPanel.add(endTurnButton);
-        add(buttonPanel, BorderLayout.NORTH);
+        
+        // Añadir panel de botones al panel inferior
+        bottomPanel.add(buttonPanel, BorderLayout.SOUTH);
+        
+        // Panel principal que contiene los tableros
+        JPanel mainPanel = new JPanel(new BorderLayout());
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, playerPanel, computerPanel);
+        splitPane.setDividerLocation(600);
+        mainPanel.add(splitPane, BorderLayout.CENTER);
+
+        add(mainPanel, BorderLayout.CENTER);
+        add(bottomPanel, BorderLayout.SOUTH);
 
         // Add action listeners to buttons
         resetButton.addActionListener(new ResetButtonListener());
@@ -111,7 +121,7 @@ public class BatallaNavalGUI extends JFrame {
             }
         });
 
-         // Centrar la ventana
+        // Centrar la ventana
         setLocationRelativeTo(null);
     }
 
@@ -395,11 +405,6 @@ public class BatallaNavalGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new BatallaNavalGUI().setVisible(true);
-            }
-        });
+        SwingUtilities.invokeLater(() -> new BatallaNavalGUI().setVisible(true));
     }
 }
