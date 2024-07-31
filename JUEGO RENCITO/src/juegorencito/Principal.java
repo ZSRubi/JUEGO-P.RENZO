@@ -30,7 +30,7 @@ public class Principal extends javax.swing.JFrame {
         pnlCerrar.setBorder(null);
     
         // Pintar el fondo del JFrame y hacerlo transparente 
-        ImageDecore mFondo = new ImageDecore(pnlBackground, "/icons/bc3.jpg");
+        ImageDecore mFondo = new ImageDecore(pnlBackground, "/icons/bc4.jpeg");
         pnlBackground.add(mFondo).repaint();
     
         // Pintar el icono de salir del JFrame
