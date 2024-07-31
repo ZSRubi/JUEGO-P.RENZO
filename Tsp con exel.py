@@ -6,10 +6,12 @@ from networkx.algorithms.approximation import traveling_salesman_problem
 import pandas as pd
 
 # Leer las coordenadas de los nodos desde el archivo Excel
+# El archivo debe tener columnas 'Nodo', 'X' e 'Y' que indican el ID del nodo y sus coordenadas.
 coords_df = pd.read_excel('nodos_coordenadas.xlsx')
+# Crear un diccionario de posiciones para los nodos basado en las coordenadas del archivo
 pos = {row['Nodo']: (row['X'], row['Y']) for _, row in coords_df.iterrows()}
 
-# Definir la matriz de distancias
+# Definir la matriz de distancias entre los nodos
 distance_matrix = np.array([
     [0, 29, 20, 21, 17, 28, 25, 17, 21, 29, 25, 27, 24, 25, 27, 24, 23, 26, 25, 22],
     [29, 0, 15, 29, 20, 25, 17, 21, 29, 25, 27, 20, 23, 30, 21, 29, 23, 25, 26, 27],
@@ -36,22 +38,22 @@ distance_matrix = np.array([
 # Crear un grafo para la visualización
 G = nx.Graph()
 
-# Agregar nodos
+# Agregar nodos al grafo
 for i in range(len(distance_matrix)):
     G.add_node(i)
 
-# Agregar aristas con distancias como pesos
+# Agregar aristas al grafo con las distancias como pesos
 for i in range(len(distance_matrix)):
     for j in range(i + 1, len(distance_matrix)):
         G.add_edge(i, j, weight=distance_matrix[i][j])
 
-# Encontrar la ruta más corta usando el algoritmo de aproximación
+# Función para encontrar la ruta aproximada más corta usando el algoritmo de aproximación
 def tsp_approximation(distance_matrix):
     G = nx.from_numpy_array(distance_matrix, create_using=nx.Graph)
     tour = traveling_salesman_problem(G, cycle=True)
     return tour
 
-# Obtener la ruta más corta
+# Obtener la ruta más corta usando la función definida
 tour = tsp_approximation(distance_matrix)
 print(f"Ruta más corta: {tour}")
 
@@ -60,22 +62,27 @@ total_distance = sum(distance_matrix[tour[i], tour[i + 1]] for i in range(len(to
 total_distance += distance_matrix[tour[-1], tour[0]]
 print(f"Distancia total: {total_distance}")
 
-# Obtener los pesos de las aristas
+# Obtener los pesos de las aristas para visualizarlas en el grafo
 weights = nx.get_edge_attributes(G, 'weight')
 
-# Dibujar el grafo con la ruta
+# Crear la figura y los ejes para la visualización
 fig, ax = plt.subplots(figsize=(10, 7))
 
+# Función de actualización para la animación
 def update(num, tour, pos, ax):
     ax.clear()
+    # Dibujar el grafo completo
     nx.draw(G, pos, with_labels=True, node_color='lightblue', node_size=500, font_size=16, font_weight='bold', ax=ax)
     nx.draw_networkx_edge_labels(G, pos, edge_labels=weights, font_color='green', ax=ax)
+    # Si no es el primer frame, dibujar la ruta de la solución
     if num > 0:
         edges = [(tour[i], tour[i + 1]) for i in range(num)] + [(tour[num], tour[0])] if num == len(tour) - 1 else [(tour[i], tour[i + 1]) for i in range(num)]
         nx.draw_networkx_edges(G, pos, edgelist=edges, edge_color='red', width=2, ax=ax)
 
+# Crear una animación para mostrar la ruta a lo largo del tiempo
 ani = FuncAnimation(fig, update, frames=len(tour), fargs=(tour, pos, ax), interval=500, repeat=False)
 
+# Mostrar el título de la visualización con la distancia total de la ruta
 plt.title(f"Ruta más corta (Distancia total: {total_distance})")
 plt.show()
 
