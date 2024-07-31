@@ -8,67 +8,71 @@ import java.awt.event.ActionListener;
 import java.util.Random;
 
 public class BatallaNavalGUI extends JFrame {
-    private static final int GRID_SIZE = 20;
+    private static final int GRID_SIZE = 20; // Tamaño del tablero
     private static final int[][][] SHIPS = {
-        {{0,0}, {0,1}, {0,2}, {1,1}, {2,0}, {2,1}, {2,2}}, // I-shaped ship
-        {{0,0}, {0,1}, {0,2}, {1,1}}, // T-shaped inverted
-        {{1,0}, {1,1}, {1,2}, {0,1}},
-        {{0,0}, {0,1}, {0,2}, {1,0}, {1,1}},
-        {{0,0}, {0,1}, {0,2}, {1,2}, {1,1}},
-        {{0,1}, {1,0}, {1,1}, {1,2}, {2,1}},
-        {{0,1}, {1,0}, {1,1}, {1,2}, {2,1}},
-        {{0,0}},{{0,0}},{{0,0}},{{0,0}},{{0,0}}    
+        {{0,0}, {0,1}, {0,2}, {1,1}, {2,0}, {2,1}, {2,2}}, // Barco en forma de I
+        {{0,0}, {0,1}, {0,2}, {1,1}}, // Barco en forma de T invertida
+        {{1,0}, {1,1}, {1,2}, {0,1}}, // Barco en forma de T
+        {{0,0}, {0,1}, {0,2}, {1,0}, {1,1}}, // Barco en forma de tanque
+        {{0,0}, {0,1}, {0,2}, {1,2}, {1,1}}, // Barco en forma de tanque
+        {{0,1}, {1,0}, {1,1}, {1,2}, {2,1}}, // Barco en forma de helicóptero
+        {{0,1}, {1,0}, {1,1}, {1,2}, {2,1}}, // Barco en forma de helicóptero
+        {{0,0}},{{0,0}},{{0,0}},{{0,0}},{{0,0}} // Barcos individuales (soldados)
     };
-    private JButton[][] playerButtons = new JButton[GRID_SIZE][GRID_SIZE];
-    private JButton[][] computerButtons = new JButton[GRID_SIZE][GRID_SIZE];
-    private char[][] playerBoard = new char[GRID_SIZE][GRID_SIZE];
-    private char[][] computerBoard = new char[GRID_SIZE][GRID_SIZE];
-    private JTextArea gameLog = new JTextArea(10, 50);
-    private JLabel timerLabel = new JLabel("Tiempo restante: 5s");
-    private int playerHits = 0;
-    private int computerHits = 0;
-    private int playerAttempts = 0;
-    private int computerAttempts = 0;
-    private boolean playerTurn = true;
-    private boolean placingShips = true;
-    private int shipIndex = 0;
-    private int[][] currentShip = SHIPS[0];
-    private Timer turnTimer;
-    private Timer countdownTimer;
-    private final int TURN_TIME_LIMIT = 5000; // 5 seconds per turn
-    private int timeRemaining;
-    private JButton resetButton;
-    private JButton abandonButton;
-    private JButton endTurnButton;
-    private String playerName; // Variable para el nombre del jugador
+
+    private JButton[][] playerButtons = new JButton[GRID_SIZE][GRID_SIZE]; // Botones para el tablero del jugador
+    private JButton[][] computerButtons = new JButton[GRID_SIZE][GRID_SIZE]; // Botones para el tablero del ordenador
+    private char[][] playerBoard = new char[GRID_SIZE][GRID_SIZE]; // Tablero del jugador
+    private char[][] computerBoard = new char[GRID_SIZE][GRID_SIZE]; // Tablero del ordenador
+    private JTextArea gameLog = new JTextArea(10, 50); // Área de texto para el registro del juego
+    private JLabel timerLabel = new JLabel("Tiempo restante: 5s"); // Etiqueta del temporizador
+    private int playerHits = 0; // Contador de aciertos del jugador
+    private int computerHits = 0; // Contador de aciertos del ordenador
+    private int playerAttempts = 0; // Contador de intentos del jugador
+    private int computerAttempts = 0; // Contador de intentos del ordenador
+    private boolean playerTurn = true; // Indica si es el turno del jugador
+    private boolean placingShips = true; // Indica si el jugador está colocando barcos
+    private int shipIndex = 0; // Índice del barco actual
+    private int[][] currentShip = SHIPS[0]; // Barco actual que se está colocando
+    private Timer turnTimer; // Temporizador para el turno del jugador
+    private Timer countdownTimer; // Temporizador de cuenta regresiva
+    private final int TURN_TIME_LIMIT = 5000; // Tiempo límite por turno (5 segundos)
+    private int timeRemaining; // Tiempo restante para el turno
+    private JButton resetButton; // Botón para reiniciar el juego
+    private JButton abandonButton; // Botón para abandonar el juego
+    private JButton endTurnButton; // Botón para terminar el turno
+    private String playerName; // Nombre del jugador
 
     public BatallaNavalGUI() {
-        setTitle("Batalla Naval");
-        setSize(1200, 800);
-        setResizable(false);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setLayout(new BorderLayout());
+        setTitle("Batalla Naval"); // Título de la ventana
+        setSize(1200, 800); // Tamaño de la ventana
+        setResizable(false); // La ventana no se puede redimensionar
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Cierra la aplicación al cerrar la ventana
+        setLayout(new BorderLayout()); // Layout principal de la ventana
 
         // Pedir nombre del jugador antes de continuar
         requestPlayerName();
 
+        // Inicializar tableros y colocar barcos en el tablero del ordenador
         initializeBoard(playerBoard);
         initializeBoard(computerBoard);
         placeShips(computerBoard);
 
+        // Crear paneles para los tableros del jugador y del ordenador
         JPanel playerPanel = createBoardPanel(playerButtons, true);
         JPanel computerPanel = createBoardPanel(computerButtons, false);
 
+        // Configurar área de texto para el registro del juego
         gameLog.setEditable(false);
         JScrollPane scrollPane = new JScrollPane(gameLog);
         scrollPane.setPreferredSize(new Dimension(1200, 150));
 
-        // Cambiar color del texto del temporizador
-        timerLabel.setForeground(Color.RED); // Cambiar el color del texto
+        // Configurar etiqueta del temporizador
+        timerLabel.setForeground(Color.RED); // Cambiar color del texto a rojo
 
         // Panel para el log, temporizador y botones
         JPanel bottomPanel = new JPanel(new BorderLayout());
-        bottomPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Añadir espacio alrededor del panel
+        bottomPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Espacio alrededor del panel
         bottomPanel.add(timerLabel, BorderLayout.WEST);
         bottomPanel.add(scrollPane, BorderLayout.CENTER);
 
@@ -87,20 +91,18 @@ public class BatallaNavalGUI extends JFrame {
         // Panel principal que contiene los tableros
         JPanel mainPanel = new JPanel(new BorderLayout());
         JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, playerPanel, computerPanel);
-        splitPane.setDividerLocation(600);
+        splitPane.setDividerLocation(600); // Posición del divisor
         mainPanel.add(splitPane, BorderLayout.CENTER);
 
         add(mainPanel, BorderLayout.CENTER);
         add(bottomPanel, BorderLayout.SOUTH);
 
-        // Add action listeners to buttons
+        // Agregar escuchadores de eventos a los botones
         resetButton.addActionListener(new ResetButtonListener());
         abandonButton.addActionListener(new AbandonButtonListener());
         endTurnButton.addActionListener(new EndTurnButtonListener());
 
-        log("Coloca tus unidades: " + getCurrentShipName());
-
-        // Initialize turn timer
+        // Inicializar temporizador para el turno del jugador
         turnTimer = new Timer(TURN_TIME_LIMIT, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -112,7 +114,7 @@ public class BatallaNavalGUI extends JFrame {
             }
         });
 
-        // Initialize countdown timer
+        // Inicializar temporizador de cuenta regresiva
         countdownTimer = new Timer(1000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -169,7 +171,7 @@ public class BatallaNavalGUI extends JFrame {
         panel.add(inputPanel, BorderLayout.CENTER);
     
         // Mostrar el cuadro de diálogo con el panel personalizado
-        int option = JOptionPane.showConfirmDialog(this, panel, "JUEGO RENCITO:Nombre del Jugador", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        int option = JOptionPane.showConfirmDialog(this, panel, "JUEGO RENCITO - Nombre del Jugador", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         
         if (option == JOptionPane.OK_OPTION) {
             String name = textField.getText().trim();
@@ -189,13 +191,11 @@ public class BatallaNavalGUI extends JFrame {
             playerName = "Jugador";
         }
     }
-    
-    
 
     @Override
     public void setSize(int width, int height) {
         super.setSize(width, height);
-        setMinimumSize(new Dimension(1200, 800));
+        setMinimumSize(new Dimension(1200, 800)); // Tamaño mínimo de la ventana
     }
 
     private JPanel createBoardPanel(JButton[][] buttons, boolean isPlayer) {
@@ -206,10 +206,10 @@ public class BatallaNavalGUI extends JFrame {
                 buttons[row][col] = button;
                 button.setPreferredSize(new Dimension(30, 30));
                 if (isPlayer) {
-                    button.addActionListener(new PlayerBoardClickListener(row, col));
+                    button.addActionListener(new PlayerBoardClickListener(row, col)); // Agregar escuchador para el tablero del jugador
                 } else {
-                    button.addActionListener(new ComputerButtonClickListener(row, col));
-                    button.setEnabled(false);
+                    button.addActionListener(new ComputerButtonClickListener(row, col)); // Agregar escuchador para el tablero del ordenador
+                    button.setEnabled(false); // Deshabilitar botones del ordenador inicialmente
                 }
                 panel.add(button);
             }
@@ -218,6 +218,7 @@ public class BatallaNavalGUI extends JFrame {
     }
 
     private void initializeBoard(char[][] board) {
+        // Inicializar el tablero con '-' para indicar casillas vacías
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 board[i][j] = '-';
@@ -240,9 +241,9 @@ public class BatallaNavalGUI extends JFrame {
                         int r = block[0];
                         int c = block[1];
                         if (horizontal) {
-                            board[row + r][col + c] = 'S';
+                            board[row + r][col + c] = 'S'; // Marcar parte del barco en el tablero
                         } else {
-                            board[row + c][col + r] = 'S';
+                            board[row + c][col + r] = 'S'; // Marcar parte del barco en el tablero
                         }
                     }
                     placed = true;
@@ -257,30 +258,31 @@ public class BatallaNavalGUI extends JFrame {
             int c = block[1];
             if (horizontal) {
                 if (row + r >= GRID_SIZE || col + c >= GRID_SIZE || board[row + r][col + c] != '-') {
-                    return false;
+                    return false; // No se puede colocar el barco
                 }
             } else {
                 if (row + c >= GRID_SIZE || col + r >= GRID_SIZE || board[row + c][col + r] != '-') {
-                    return false;
+                    return false; // No se puede colocar el barco
                 }
             }
         }
-        return true;
+        return true; // Se puede colocar el barco
     }
 
     private void log(String message) {
-        gameLog.append(message + "\n");
+        gameLog.append(message + "\n"); // Añadir mensaje al registro del juego
     }
 
     private String getCurrentShipName() {
+        // Obtener nombre de la forma del barco actual
         switch (shipIndex) {
             case 0: return "Forma de barco en I";
             case 1: return "Forma de barco en T";
             case 2: return "Forma de barco en T invertida";
             case 3: return "Forma de tanque";
             case 4: return "Forma de tanque";
-            case 5: return "Forma de helicoptero";
-            case 6: return "Forma de helicoptero";
+            case 5: return "Forma de helicóptero";
+            case 6: return "Forma de helicóptero";
             case 7: return "Forma de soldado";
             case 8: return "Forma de soldado";
             case 9: return "Forma de soldado";
@@ -306,7 +308,7 @@ public class BatallaNavalGUI extends JFrame {
                     for (int[] block : currentShip) {
                         int r = block[0];
                         int c = block[1];
-                        playerButtons[row + r][col + c].setBackground(Color.GREEN);
+                        playerButtons[row + r][col + c].setBackground(Color.GREEN); // Marcar barco en el tablero del jugador
                         playerBoard[row + r][col + c] = 'S';
                     }
                     shipIndex++;
@@ -316,8 +318,8 @@ public class BatallaNavalGUI extends JFrame {
                     } else {
                         placingShips = false;
                         log("Todos los barcos colocados. Tu turno para atacar.");
-                        enableComputerBoard();
-                        startPlayerTurn();
+                        enableComputerBoard(); // Habilitar tablero del ordenador
+                        startPlayerTurn(); // Iniciar turno del jugador
                     }
                 } else {
                     log("No se puede colocar el barco aquí. Intenta otra ubicación.");
@@ -327,6 +329,7 @@ public class BatallaNavalGUI extends JFrame {
     }
 
     private void enableComputerBoard() {
+        // Habilitar todos los botones del tablero del ordenador
         for (int row = 0; row < GRID_SIZE; row++) {
             for (int col = 0; col < GRID_SIZE; col++) {
                 computerButtons[row][col].setEnabled(true);
@@ -349,12 +352,12 @@ public class BatallaNavalGUI extends JFrame {
 
             JButton button = (JButton) e.getSource();
             if (computerBoard[row][col] == 'S') {
-                button.setBackground(Color.RED);
+                button.setBackground(Color.RED); // Marcar acierto
                 log("¡Acertaste en una unidad!");
                 playerHits++;
                 computerBoard[row][col] = 'H';
             } else {
-                button.setBackground(Color.BLUE);
+                button.setBackground(Color.BLUE); // Marcar fallo
                 log("Fallaste.");
                 computerBoard[row][col] = 'M';
             }
@@ -362,12 +365,12 @@ public class BatallaNavalGUI extends JFrame {
 
             if (playerHits == 12) {
                 log("¡Has ganado! Todas las unidades del oponente destruidas.");
-                disableBoard(computerButtons);
+                disableBoard(computerButtons); // Deshabilitar tablero del ordenador
                 return;
             }
 
             playerTurn = false;
-            computerTurn();
+            computerTurn(); // Realizar turno de la computadora
         }
     }
 
@@ -378,15 +381,15 @@ public class BatallaNavalGUI extends JFrame {
         do {
             row = random.nextInt(GRID_SIZE);
             col = random.nextInt(GRID_SIZE);
-        } while (playerBoard[row][col] == 'H' || playerBoard[row][col] == 'M');
+        } while (playerBoard[row][col] == 'H' || playerBoard[row][col] == 'M'); // Evitar celdas ya marcadas
 
         if (playerBoard[row][col] == 'S') {
-            playerButtons[row][col].setBackground(Color.RED);
+            playerButtons[row][col].setBackground(Color.RED); // Marcar acierto
             log("La computadora acertó en una de tus unidades.");
             computerHits++;
             playerBoard[row][col] = 'H';
         } else {
-            playerButtons[row][col].setBackground(Color.BLUE);
+            playerButtons[row][col].setBackground(Color.BLUE); // Marcar fallo
             log("La computadora falló.");
             playerBoard[row][col] = 'M';
         }
@@ -394,15 +397,16 @@ public class BatallaNavalGUI extends JFrame {
 
         if (computerHits == 12) {
             log("La computadora ha ganado. Todas tus unidades han sido destruidas.");
-            disableBoard(playerButtons);
+            disableBoard(playerButtons); // Deshabilitar tablero del jugador
             return;
         }
 
         playerTurn = true;
-        startPlayerTurn();
+        startPlayerTurn(); // Iniciar turno del jugador
     }
 
     private void disableBoard(JButton[][] buttons) {
+        // Deshabilitar todos los botones del tablero
         for (int row = 0; row < GRID_SIZE; row++) {
             for (int col = 0; col < GRID_SIZE; col++) {
                 buttons[row][col].setEnabled(false);
@@ -411,10 +415,10 @@ public class BatallaNavalGUI extends JFrame {
     }
 
     private void startPlayerTurn() {
-        timeRemaining = TURN_TIME_LIMIT / 1000;
+        timeRemaining = TURN_TIME_LIMIT / 1000; // Inicializar tiempo restante
         timerLabel.setText("Tiempo restante: " + timeRemaining + "s");
-        turnTimer.restart();
-        countdownTimer.restart();
+        turnTimer.restart(); // Reiniciar temporizador del turno
+        countdownTimer.restart(); // Reiniciar temporizador de cuenta regresiva
     }
 
     private void resetGame() {
@@ -436,6 +440,7 @@ public class BatallaNavalGUI extends JFrame {
     }
 
     private void resetButtons(JButton[][] buttons) {
+        // Restaurar estado inicial de todos los botones
         for (int row = 0; row < GRID_SIZE; row++) {
             for (int col = 0; col < GRID_SIZE; col++) {
                 buttons[row][col].setEnabled(true);
@@ -447,23 +452,21 @@ public class BatallaNavalGUI extends JFrame {
     private class ResetButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            resetGame();
+            resetGame(); // Llamar a la función para reiniciar el juego
         }
     }
 
     private class AbandonButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Mostrar un cuadro de diálogo informativo al usuario
+            // Mostrar mensaje informativo y cerrar la aplicación
             JOptionPane.showMessageDialog(BatallaNavalGUI.this, 
                                           "Has abandonado el juego.", 
                                           "Juego Abandonado", 
                                           JOptionPane.INFORMATION_MESSAGE);
-            // Cerrar la ventana de la aplicación
-            System.exit(0); // Termina la aplicación
+            System.exit(0); // Terminar la aplicación
         }
     }
-    
 
     private class EndTurnButtonListener implements ActionListener {
         @Override
@@ -471,12 +474,12 @@ public class BatallaNavalGUI extends JFrame {
             if (playerTurn) {
                 log("Has terminado tu turno. Turno de la computadora.");
                 playerTurn = false;
-                computerTurn();
+                computerTurn(); // Realizar turno de la computadora
             }
         }
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new BatallaNavalGUI().setVisible(true));
+        SwingUtilities.invokeLater(() -> new BatallaNavalGUI().setVisible(true)); // Iniciar la aplicación
     }
 }
