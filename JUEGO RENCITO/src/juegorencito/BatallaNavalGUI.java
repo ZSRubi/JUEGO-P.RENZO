@@ -40,6 +40,7 @@ public class BatallaNavalGUI extends JFrame {
     private JButton resetButton;
     private JButton abandonButton;
     private JButton endTurnButton;
+    private String playerName; // Variable para el nombre del jugador
 
     public BatallaNavalGUI() {
         setTitle("Batalla Naval");
@@ -47,6 +48,9 @@ public class BatallaNavalGUI extends JFrame {
         setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+
+        // Pedir nombre del jugador antes de continuar
+        requestPlayerName();
 
         initializeBoard(playerBoard);
         initializeBoard(computerBoard);
@@ -124,6 +128,69 @@ public class BatallaNavalGUI extends JFrame {
         // Centrar la ventana
         setLocationRelativeTo(null);
     }
+
+    private void requestPlayerName() {
+        // Crear un panel principal con BorderLayout
+        JPanel panel = new JPanel(new BorderLayout());
+        panel.setBackground(new Color(240, 240, 240)); // Color de fondo suave
+        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15)); // Espacio alrededor del panel
+        
+        // Crear un panel para la etiqueta y el campo de texto con GridBagLayout
+        JPanel inputPanel = new JPanel(new GridBagLayout());
+        inputPanel.setBackground(new Color(240, 240, 240)); // Mismo color de fondo para consistencia
+    
+        // Configurar GridBagConstraints para los componentes
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(5, 5, 5, 5); // Espaciado entre los componentes
+    
+        // Crear la etiqueta
+        JLabel label = new JLabel("Introduce tu nombre:");
+        label.setFont(new Font("Arial", Font.BOLD, 14));
+        label.setForeground(Color.BLACK);
+    
+        // Crear el campo de texto
+        JTextField textField = new JTextField(20);
+        textField.setFont(new Font("Arial", Font.PLAIN, 14));
+        textField.setBackground(Color.WHITE);
+        textField.setForeground(Color.BLACK);
+    
+        // Añadir la etiqueta y el campo de texto al panel de entrada
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.WEST;
+        inputPanel.add(label, gbc);
+    
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        inputPanel.add(textField, gbc);
+    
+        // Añadir el panel de entrada al panel principal
+        panel.add(inputPanel, BorderLayout.CENTER);
+    
+        // Mostrar el cuadro de diálogo con el panel personalizado
+        int option = JOptionPane.showConfirmDialog(this, panel, "JUEGO RENCITO:Nombre del Jugador", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        
+        if (option == JOptionPane.OK_OPTION) {
+            String name = textField.getText().trim();
+            if (!name.isEmpty()) {
+                playerName = name;
+            } else {
+                playerName = "Jugador";
+            }
+    
+            // Mostrar mensaje de bienvenida con formato HTML
+            String welcomeMessage = String.format(
+                "<html><body style='width: 300px; background-color: #d0e0f0;'><h2>¡Bienvenido al juego Rencito, %s!</h2>" +
+                "<p>Estamos encantados de tenerte aquí. ¡Prepárate para un emocionante desafío!</p></body></html>", playerName);
+        
+            JOptionPane.showMessageDialog(this, welcomeMessage, "Bienvenido al juego Rencito", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            playerName = "Jugador";
+        }
+    }
+    
+    
 
     @Override
     public void setSize(int width, int height) {
@@ -387,11 +454,16 @@ public class BatallaNavalGUI extends JFrame {
     private class AbandonButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            log("Has abandonado el juego.");
-            disableBoard(playerButtons);
-            disableBoard(computerButtons);
+            // Mostrar un cuadro de diálogo informativo al usuario
+            JOptionPane.showMessageDialog(BatallaNavalGUI.this, 
+                                          "Has abandonado el juego.", 
+                                          "Juego Abandonado", 
+                                          JOptionPane.INFORMATION_MESSAGE);
+            // Cerrar la ventana de la aplicación
+            System.exit(0); // Termina la aplicación
         }
     }
+    
 
     private class EndTurnButtonListener implements ActionListener {
         @Override
