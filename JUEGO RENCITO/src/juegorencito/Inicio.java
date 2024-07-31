@@ -11,31 +11,24 @@ public class Inicio {
         // Crear el marco
         JFrame frame = new JFrame("INICIO");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(400, 400); // Aumentar el tamaño para acomodar la imagen
+        frame.setSize(400, 400); // Ajustar el tamaño para acomodar los componentes
 
-        // Cargar la imagen del icono
-        ImageIcon icon = new ImageIcon("icons/avion.png"); // Ruta a tu imagen de icono
-        frame.setIconImage(icon.getImage());
-
-        // Cargar la imagen de fondo
-        ImageIcon fondo = new ImageIcon("src/main/java/com/mavenproject2/fondo.png"); // Reemplaza con la ruta a tu archivo de imagen de fondo
-
-        // Crear el panel principal
+        // Crear el panel principal con color de fondo
         JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
-
-        // Crear un JLabel para la imagen de fondo
-        JLabel fondoLabel = new JLabel(fondo);
-        fondoLabel.setSize(400, 400); // Ajustar el tamaño del fondo
-        fondoLabel.setLayout(new BorderLayout());
+        panel.setBackground(new Color(175, 175, 155)); // Color verde ceniza
 
         // Crear y configurar la etiqueta de texto
-        JLabel textLabel = new JLabel("Menu Principal", SwingConstants.CENTER);
+        JLabel textLabel = new JLabel("Menu Principal");
         textLabel.setFont(new Font("Arial", Font.BOLD, 20));
+        textLabel.setForeground(Color.WHITE); // Asegúrate de que el texto sea visible sobre el fondo
+        textLabel.setHorizontalAlignment(SwingConstants.CENTER); // Centrar el texto horizontalmente
 
-        // Crear un panel para la etiqueta de texto y el campo de texto
+        // Crear un panel para la etiqueta de texto
         JPanel titlePanel = new JPanel();
         titlePanel.setLayout(new BorderLayout());
+        titlePanel.setOpaque(false); // Hacer que el panel de título sea transparente
+        titlePanel.setBorder(BorderFactory.createEmptyBorder(30, 0, 0, 0)); // Añadir espacio arriba
         titlePanel.add(textLabel, BorderLayout.NORTH);
 
         // Crear y configurar el campo de texto para el nombre
@@ -43,31 +36,27 @@ public class Inicio {
         nameField.setFont(new Font("Arial", Font.PLAIN, 16));
         nameField.setPreferredSize(new Dimension(150, 30));
 
-        // Añadir la etiqueta y el campo de texto al panel de título
+        // Añadir la etiqueta y el campo de texto al panel de entrada
         JPanel inputPanel = new JPanel();
         inputPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        inputPanel.setOpaque(false); // Hacer que el panel de entrada sea transparente
         inputPanel.add(new JLabel("Nombre:"));
         inputPanel.add(nameField);
 
-        // Crear un JLabel para la imagen del icono
-        ImageIcon iconImage = new ImageIcon("icons/avion.png"); // Ruta a tu imagen
-        JLabel imageLabel = new JLabel(iconImage);
-
-        // Crear un panel para la imagen del icono
-        JPanel imagePanel = new JPanel();
-        imagePanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        imagePanel.add(imageLabel);
-
-        // Añadir el panel de entrada y el panel de imagen al panel de título
-        titlePanel.add(inputPanel, BorderLayout.CENTER);
-        titlePanel.add(imagePanel, BorderLayout.SOUTH);
-
-        // Añadir el panel de título al panel de fondo en la parte central
-        fondoLabel.add(titlePanel, BorderLayout.CENTER);
+        // Crear un panel contenedor para centrar el inputPanel en el panel principal
+        JPanel centerPanel = new JPanel();
+        centerPanel.setLayout(new GridBagLayout());
+        centerPanel.setOpaque(false); // Hacer que el panel central sea transparente
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.anchor = GridBagConstraints.CENTER;
+        centerPanel.add(inputPanel, gbc);
 
         // Crear un panel para los botones y centrarlo
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        buttonPanel.setOpaque(false); // Hacer que el panel de botones sea transparente
 
         // Crear botón "Jugar" con borde redondeado
         JButton botonJugar = new JButton("Jugar");
@@ -82,19 +71,6 @@ public class Inicio {
         // Establecer el tamaño preferido del botón "Jugar"
         botonJugar.setPreferredSize(new Dimension(150, 40));
 
-        // Crear botón "Regresar" con borde redondeado
-        JButton botonRegresar = new JButton("Regresar");
-        botonRegresar.setFont(new Font("Arial", Font.BOLD, 16));
-        botonRegresar.setForeground(Color.WHITE);
-        botonRegresar.setBackground(new Color(153, 0, 0));
-        botonRegresar.setOpaque(true);
-        botonRegresar.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.WHITE, 2),
-                BorderFactory.createEmptyBorder(10, 20, 10, 20)));
-
-        // Establecer el tamaño preferido del botón "Regresar"
-        botonRegresar.setPreferredSize(new Dimension(150, 40));
-
         // Añadir el listener para el botón "Jugar"
         botonJugar.addActionListener(new ActionListener() {
             @Override
@@ -105,24 +81,16 @@ public class Inicio {
             }
         });
 
-        // Añadir el listener para el botón "Regresar"
-        botonRegresar.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Cerrar el marco actual
-                frame.dispose();
-            }
-        });
-
-        // Añadir los botones al panel de botones
+        // Añadir el botón al panel de botones
         buttonPanel.add(botonJugar);
-        buttonPanel.add(botonRegresar);
 
-        // Añadir el panel de botones al panel de fondo en la parte inferior
-        fondoLabel.add(buttonPanel, BorderLayout.SOUTH);
+        // Añadir los paneles al panel principal
+        panel.add(titlePanel, BorderLayout.NORTH); // Añadir el título en la parte superior
+        panel.add(centerPanel, BorderLayout.CENTER); // Centrar el panel de entrada en el centro
+        panel.add(buttonPanel, BorderLayout.SOUTH); // Añadir los botones en la parte inferior
 
         // Añadir el panel al marco
-        frame.add(fondoLabel);
+        frame.add(panel);
 
         // Centrar el marco en la pantalla
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -133,9 +101,5 @@ public class Inicio {
 
         // Hacer visible el marco
         frame.setVisible(true);
-    }
-
-    void setVisible(boolean b) {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 }
