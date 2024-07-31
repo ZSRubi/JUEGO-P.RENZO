@@ -22,7 +22,7 @@ public class Main {
             mSplash.dispose();
             
             // Iniciar la clase Inicio después de cerrar el Splash
-            Inicio.main(null);
+            BatallaNavalGUI.main(null);
         };
         
         Thread mHiloSplash = new Thread(mRun);
